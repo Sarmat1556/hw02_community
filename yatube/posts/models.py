@@ -4,11 +4,20 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+class Group(models.Model):
+    title = models.CharField('Название группы', max_length=200)
+    slug = models.SlugField(unique=True)
+    description = models.TextField('Описание группы')
+
+    def __str__(self):
+        return self.title
+    
+
 class Post(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)
     group = models.ForeignKey(
-        "Group",
+        Group,
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -26,12 +35,3 @@ class Post(models.Model):
 
     def __str__(self):
         return self.text
-
-
-class Group(models.Model):
-    title = models.CharField('Название группы', max_length=200)
-    slug = models.SlugField(unique=True)
-    description = models.TextField('Описание группы')
-
-    def __str__(self):
-        return self.title
